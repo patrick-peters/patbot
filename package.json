@@ -1,0 +1,13 @@
+{
+    "name": "patbot",
+    "dependencies": {
+        "node-emoji": "^1.8.1",
+        "telebot": "^1.2.3"
+    },
+    "config": {
+        "port": "8080"
+    },
+    "scripts": {
+        "start": "node ./patbot.js"
+    }
+}
