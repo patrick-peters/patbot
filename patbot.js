@@ -5,6 +5,7 @@ const answer = require('./answers.js');
 
 const bot = new TeleBot('TELEGRAM_TOKEN');
 const markdownOption = { parseMode: 'Markdown' };
+const hideMarkup = { replyMarkup: 'hide' };
 
 bot.on('/start', msg => {
     return bot.sendMessage(msg.from.id, answer.start(msg.from), markdownOption);
@@ -26,9 +27,9 @@ bot.on(['/options'], msg => {
     let replyMarkup = bot.keyboard([
         ['/buttons', '/joke'],
         ['/start', '/hide']
-    ], {resize: true});
+    ], { resize: true });
 
-    return bot.sendMessage(msg.from.id, 'Keyboard.', {replyMarkup});
+    return bot.sendMessage(msg.from.id, answer.options(), {replyMarkup});
 
 });
 
@@ -38,14 +39,15 @@ bot.on('/buttons', msg => {
     let replyMarkup = bot.keyboard([
         [bot.button('contact', 'Your contact'), bot.button('location', 'Your location')],
         ['/options', '/hide']
-    ], {resize: true});
+    ], { resize: true });
 
-    return bot.sendMessage(msg.from.id, 'Button example.', {replyMarkup});
+    return bot.sendMessage(msg.from.id, answer.buttons(), {replyMarkup});
 
 });
 
+// Send joke
 bot.on('/joke', (msg) => {
-    var options = { url: 'icanhazdadjoke.com', headers: { accept: 'text/plain' } };
+    var options = { url: 'icanhazdadjoke.com', headers: { accept: 'text/plain' }};
 
     curl.request(options, function (err, data) {
         return bot.sendMessage(msg.from.id, data, markdownOption);
@@ -54,14 +56,12 @@ bot.on('/joke', (msg) => {
 
 // Hide keyboard
 bot.on('/hide', msg => {
-    return bot.sendMessage(
-        msg.from.id, 'Hide keyboard. Type /options to show.', {replyMarkup: 'hide'}
-    );
+    return bot.sendMessage(msg.from.id, answer.hide(), hideMarkup);
 });
 
 // On location on contact message
 bot.on(['location', 'contact'], (msg, self) => {
-    return bot.sendMessage(msg.from.id, `Thank you for ${ self.type }.`);
+    return bot.sendMessage(msg.from.id, answer.typeOf(self.type));
 });
 
 // -----------------------------------------------------------------------
