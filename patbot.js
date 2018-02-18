@@ -3,7 +3,7 @@ const curl = require('curlrequest');
 
 const answer = require('./answers.js');
 
-const bot = new TeleBot('TELEGRAM_TOKEN');
+const bot = new TeleBot(process.env.TELEGRAM_TOKEN);
 const markdownOption = { parseMode: 'Markdown' };
 const hideMarkup = { replyMarkup: 'hide' };
 
